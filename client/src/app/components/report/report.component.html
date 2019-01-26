@@ -1,0 +1,33 @@
+<div class="form">
+  <div class="field">
+    <label for="startDate">Начало периода: </label>
+    <input type="date" id="startDate" [(ngModel)]="startDate"/>
+  </div>
+  <div class="field">
+    <label for="endDate">Конец периода: </label>
+    <input type="date" id="endDate" [(ngModel)]="endDate"/>
+  </div>
+  <div *ngIf="startDate && endDate && startDate > endDate" class="error-message">
+    Не может быть раньще начальной даты.
+  </div>
+  <div>
+    <button (click)="load(startDate,endDate)" [disabled]="!startDate || !endDate || startDate > endDate">Выгрузить</button>
+  </div>
+</div>
+
+<div class="report">
+  <h3>Отчёт по затратам:</h3>
+  <table>
+    <tr>
+      <th>ID</th><th>Дата</th><th>Кто</th>
+      <th>Сумма</th><th>На что</th>
+    </tr>
+    <tr *ngFor="let transaction of transactions">
+      <td>{{transaction.id}}</td>
+      <td>{{transaction.date}}</td>
+      <td>{{transaction.member.name}}</td>
+      <td>{{transaction.amount}}</td>
+      <td>{{transaction.comment}}</td>
+    </tr>
+  </table>
+</div>

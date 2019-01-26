@@ -1,0 +1,35 @@
+table {
+  width: 100%;
+  border-spacing: 0;
+}
+td, th {
+  border: 1px solid;
+  padding: .1em;
+}
+caption {
+  padding-bottom: .1em;
+}
+
+.error-message {
+  clear: both;
+  color: #cd0000;
+  font-size: 0.75em;
+  font-style: italic;
+  line-height: 0.8em;
+  margin-left: 1em;
+}
+
+.form {
+  clear: both;
+  float: left;
+  padding-top: 20px;
+}
+.form div {
+  clear:both;
+  text-align:right;
+  line-height:40px;
+}
+
+.report {
+  clear: both;
+}

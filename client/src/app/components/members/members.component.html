@@ -1,0 +1,38 @@
+<h3>Члены семьи:</h3>
+<h4>Добавить нового члена семьи:</h4>
+<div>
+  <label>Имя:
+    <input type="text" [(ngModel)]="memberName"
+           required minlength="2" maxlength="30"
+           pattern="([А-ЯЁа-яёA-Za-z]+(([-])|(\.)|(\s)|(\.\s))?)+"
+           appUniqueName #name="ngModel"/>
+  </label>
+  <button (click)="add(name.value)" [disabled]="!name.valid">Добавить</button>
+  <div *ngIf="name.invalid && (name.dirty || name.touched)" class="error-message">
+    <div *ngIf="name.errors.required">
+      Нужно ввести имя.
+    </div>
+    <div *ngIf="name.errors.minlength">
+      Имя должно содержть 3-30 символов.
+    </div>
+    <div *ngIf="name.errors.pattern">
+      Недопустимый символ.
+    </div>
+    <div *ngIf="name.pending">
+      Проверка...
+    </div>
+    <div *ngIf="name.errors?.uniqueName">
+      Имя уже занято, введите другое.
+    </div>
+  </div>
+</div>
+<h4>Перечень всех членов семьи:</h4>
+<ul class="members">
+  <li *ngFor="let member of members">
+    <a routerLink="/members/{{member.id}}">
+      <span class="badge">{{member.id}}</span> {{member.name}}
+    </a>
+    <button class="delete" title="Удалить" (click)="delete(member)">x</button>
+  </li>
+</ul>
+

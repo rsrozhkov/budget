@@ -1,0 +1,125 @@
+/* BudgetComponent's private CSS styles */
+a {
+  text-decoration: none;
+}
+
+button {
+  margin-right: 20px;
+  margin-top: 20px;
+  font-family: Arial;
+  background-color: #eee;
+  border: none;
+  padding: 10px 20px;
+  min-width: 8em;
+  border-radius: 4px;
+  cursor: pointer; cursor: hand;
+}
+button:hover {
+  background-color: #cfd8dc;
+}
+button:disabled {
+  background-color: #eee;
+  color: #ccc;
+  cursor: auto;
+}
+
+h3 {
+  margin-bottom: 0;
+}
+h4 {
+  position: relative;
+  margin: 0;
+}
+
+label {
+  float:left;
+  padding-right:10px;
+}
+
+select {
+  min-width: 173px;
+}
+
+.amount {
+  -moz-appearance: textfield;
+}
+.amount::-webkit-inner-spin-button {
+  display: none;
+}
+
+.balance div {
+  font-size: 4em;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.error-message {
+  clear: both;
+  color: #cd0000;
+  font-size: 0.75em;
+  font-style: italic;
+  line-height: 0.8em;
+  margin-bottom: 1em;
+  margin-left: 1em;
+}
+
+.form {
+  clear: both;
+  float: left;
+  padding-top: 20px;
+}
+.form div {
+  clear:both;
+  text-align:right;
+  line-height:40px;
+}
+
+.grid {
+  margin: 0;
+}
+.grid a {
+  float: left;
+  margin-right: 20px;
+  margin-bottom: 10px;
+}
+.grid div {
+  padding: 20px;
+  text-align: center;
+  color: #eee;
+  min-width: 14em;
+  background-color: #607D8B;
+  border-radius: 2px;
+}
+.grid div:hover {
+  background-color: #EEE;
+  cursor: pointer;
+  color: #607d8b;
+}
+.gird .module.selected:hover {
+  background-color: #BBD8DC !important;
+  color: white;
+}
+
+.selected {
+  background-color: #CFD8DC !important;
+  color: white;
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    margin: 0;
+  }
+  .module {
+    min-width: 12em;
+  }
+}
+
+@media (max-width: 600px) {
+  .balance div {
+    font-size: 1.5em;
+  }
+  .module {
+    font-size: .8em;
+  }
+}
+

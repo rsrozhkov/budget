@@ -1,0 +1,78 @@
+<div class = "balance">
+  <h3>В семейном бюджете:</h3>
+  <div>{{balance/100 | currency:'RUB':'symbol':'1.2-2':'ru'}} </div>
+</div>
+
+<div class="grid">
+  <a (click)="setTransactionType(1)">
+    <div [class.selected]="transactionType === 1">
+      <h4>Внести</h4>
+    </div>
+  </a>
+  <a (click)="setTransactionType(-1)">
+    <div [class.selected]="transactionType === -1">
+      <h4>Потратить</h4>
+    </div>
+  </a>
+</div>
+
+
+<div class="form" *ngIf="transactionType != 0">
+
+  <div class="field">
+    <label for="select">Имя:</label>
+    <select id="select" [(ngModel)]="selectedMember">
+      <option disabled>Выберите имя...</option>
+      <option *ngFor="let member of members" [ngValue]="member">{{member.name}}</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label>Сумма:</label>
+    <input class="amount" [(ngModel)]="tAmount" type="number" required min="0.01"
+           pattern="[0-9]+.[0-9]{0,2}" #amount="ngModel" placeholder="0.00"/>
+
+    <div *ngIf="amount.invalid && (amount.dirty || amount.touched)">
+      <label *ngIf="amount.errors.required" class="error-message">
+        Нужно ввести сумму.
+      </label>
+      <label *ngIf="amount.errors.min" class="error-message">
+        Минимальная сумма 0.01
+      </label>
+      <label *ngIf="amount.errors.pattern" class="error-message">
+        Формат суммы "123.45".
+      </label>
+    </div>
+    <label *ngIf="notEnoughMoney" class="error-message">
+      Недостаточно средств
+    </label>
+  </div>
+
+  <div class="field">
+    <label *ngIf="transactionType === 1">Откуда:</label>
+    <label *ngIf="transactionType === -1">На что:</label>
+    <input type="text" [(ngModel)]="transactionComment"
+           required minlength="3" maxlength="150"
+           pattern=".*" #comment="ngModel">
+
+    <div *ngIf="comment.invalid && (comment.dirty || comment.touched)">
+      <label *ngIf="comment.errors.required" class="error-message">
+        Нужно заполнить.
+      </label>
+      <label *ngIf="comment.errors.minlength" class="error-message">
+        От 3 до 150 символов.
+      </label>
+      <label *ngIf="comment.errors.pattern" class="error-message">
+        Недопустимый символ.
+      </label>
+    </div>
+
+  </div>
+
+  <div>
+    <button (click)="goBack()">Отмена</button>
+    <button (click)="submit(selectedMember, amount.value, comment.value)"
+            [disabled]="!selectedMember || !amount.valid || !comment.valid">ОК</button>
+  </div>
+
+</div>
