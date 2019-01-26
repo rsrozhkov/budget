@@ -32,7 +32,7 @@ export class ChartComponent implements OnInit {
     this.data.push(0);
     for(let i =0, total=0, len = this.transactions.length; i < len; i++) {
       this.labels.push(this.transactions[i].date);
-      total = this.transactions[i].amount +total;
+      total = this.transactions[i].amount/100 +total;
       this.data.push(total);
     }
   }
