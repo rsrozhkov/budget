@@ -10,7 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class BudgetWebappApplicationTests {
 
 	@Test
-	public void contextLoads() throws Exception {
+	public void contextLoads() {
 	}
 
 }

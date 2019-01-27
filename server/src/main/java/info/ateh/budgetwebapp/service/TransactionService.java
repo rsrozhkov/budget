@@ -3,14 +3,11 @@ package info.ateh.budgetwebapp.service;
 import info.ateh.budgetwebapp.entity.Transaction;
 import info.ateh.budgetwebapp.exception.NotEnoughMoneyException;
 import info.ateh.budgetwebapp.repository.TransactionRepository;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.*;
 import java.util.Date;
 import java.util.List;
-
-import static info.ateh.budgetwebapp.utils.Constants.*;
 
 @Service
 public class TransactionService {
@@ -43,7 +40,7 @@ public class TransactionService {
      */
     public List<Transaction> getWithdrawBetweenDates(@NotNull @PastOrPresent Date start,
                                                      @NotNull @PastOrPresent Date end) {
-        if (start.after(end)) replaceDates(start, end);
+        if (start.after(end)) return transactionRepository.findWithdrawBetweenDates(end, start);
         return transactionRepository.findWithdrawBetweenDates(start, end);
     }
 
@@ -63,15 +60,6 @@ public class TransactionService {
         String comment = newTransaction.getComment();
         newTransaction.setComment(normalizeSpaces(comment));
         return transactionRepository.save(newTransaction);
-    }
-
-    /**
-     * Меняет даты местами
-     */
-    private void replaceDates(Date start, Date end) {
-        long time = start.getTime();
-        start = end;
-        end = new Date(time);
     }
 
     /**

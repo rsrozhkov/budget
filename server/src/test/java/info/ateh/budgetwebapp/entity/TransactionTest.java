@@ -1,15 +1,6 @@
 package info.ateh.budgetwebapp.entity;
 
-import org.junit.Test;
-import org.mockito.Mock;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
-import javax.xml.crypto.Data;
-
-import java.util.Date;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 
 public class TransactionTest {
     @MockBean private Member member;

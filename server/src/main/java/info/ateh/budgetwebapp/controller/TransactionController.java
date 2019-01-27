@@ -33,7 +33,7 @@ public class TransactionController {
 
     /** GET: возвращает расходные операции в пределах дат */
     @GetMapping("/transactions/withdrawBetweenDates/{start}/{end}")
-    private List<Transaction> withdrawBtweenDates(@PathVariable @DateTimeFormat(pattern = DATE_PATTERN) Date start,
+    private List<Transaction> withdrawBetweenDates(@PathVariable @DateTimeFormat(pattern = DATE_PATTERN) Date start,
                                                   @PathVariable @DateTimeFormat(pattern = DATE_PATTERN) Date end) {
         return service.getWithdrawBetweenDates(start, end);
     }
