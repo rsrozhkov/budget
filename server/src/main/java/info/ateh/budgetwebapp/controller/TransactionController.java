@@ -1,14 +1,9 @@
 package info.ateh.budgetwebapp.controller;
 
 import info.ateh.budgetwebapp.entity.Transaction;
-import info.ateh.budgetwebapp.exception.NotEnoughMoneyException;
-import info.ateh.budgetwebapp.repository.TransactionRepository;
+import info.ateh.budgetwebapp.service.TransactionService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PastOrPresent;
-import javax.validation.constraints.Positive;
 import java.util.Date;
 import java.util.List;
 
@@ -18,58 +13,40 @@ import static info.ateh.budgetwebapp.utils.Constants.DATE_PATTERN;
 @CrossOrigin(origins = "http://localhost:4200")
 public class TransactionController {
 
-    private final TransactionRepository transactionRepository;
+    private final TransactionService service;
 
-    TransactionController(TransactionRepository transactionRepository) {
-        this.transactionRepository = transactionRepository;
+    TransactionController(TransactionService service) {
+        this.service = service;
     }
 
     /** GET: возвращает текущий баланс */
     @GetMapping("/transactions/balance")
     private Long balance() {
-        List<Transaction> list = transactionRepository.findAll();
-        Long sum = 0L;
-        for (Transaction t: list) sum += t.getAmount();
-        return sum;
+        return  service.getBalance();
     }
 
-    /** GET: возвращает все транзакции найденые в репозитории */
+    /** GET: возвращает все транзакции */
     @GetMapping("/transactions")
     private List<Transaction> all() {
-        return transactionRepository.findAll();
+        return service.getAllTransactions();
     }
 
-    /** GET: возвращает все транзакции в пределах заданных дат.
-     * Если дата конца позже, чем дата начала, то меняет их местами */
-    @GetMapping("/transactions/betweenDates/{start}/{end}")
-    private List<Transaction> betweenDates(@PathVariable @NotNull @PastOrPresent
-                                   @DateTimeFormat(pattern = DATE_PATTERN) Date start,
-                                   @PathVariable @NotNull @PastOrPresent
-                                   @DateTimeFormat(pattern = DATE_PATTERN) Date end) {
-        if (start.after(end)) replaceDates(start,end);
-        return transactionRepository.findBetweenDates(start,end);
+    /** GET: возвращает расходные операции в пределах дат */
+    @GetMapping("/transactions/withdrawBetweenDates/{start}/{end}")
+    private List<Transaction> withdrawBtweenDates(@PathVariable @DateTimeFormat(pattern = DATE_PATTERN) Date start,
+                                                  @PathVariable @DateTimeFormat(pattern = DATE_PATTERN) Date end) {
+        return service.getWithdrawBetweenDates(start, end);
     }
 
-    /** GET: Проверяет числятся ли за членом семьи транзакции
-     *  и возвращает результат*/
+    /** GET: Возвращает результат проверки члена семьи на наличие у него транзакций*/
     @GetMapping("/transactions/checkForOwner/{id}")
-    private boolean checkForOwner(@PathVariable @Positive @NotNull Long id) {
-        return (transactionRepository.findByMemberId(id).size() > 0);
+    private boolean checkForOwner(@PathVariable Long id) {
+        return service.checkMemberForTransactions(id);
     }
 
-    /** POST: добавляет новую транзакцию в репозиторий если она в
-     * пределах баланса + округление суммы до второго порядка */
+    /** POST: добавляет новую транзакцию в репозиторий */
     @PostMapping("/transactions")
-    private Transaction newTransaction(@RequestBody @NotNull Transaction newTransaction) {
-        if (newTransaction.getAmount()+ balance() < 0) throw new NotEnoughMoneyException();
-        else return transactionRepository.save(newTransaction);
+    private Transaction newTransaction(@RequestBody Transaction newTransaction) {
+        return service.addTransaction(newTransaction);
     }
-
-    private void replaceDates(Date start, Date end) {
-        Long time = start.getTime();
-        start = end;
-        end = new Date(time);
-    }
-
-
 }

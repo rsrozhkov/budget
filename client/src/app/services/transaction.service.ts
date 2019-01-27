@@ -36,7 +36,7 @@ export class TransactionService {
 
   /** GET: get transactions from the server between two dates*/
   getBetweenDates(start: Date, end: Date): Observable<Transaction[]> {
-    const url = `${this.transactionsUrl}/betweenDates/${start}/${end}`;
+    const url = `${this.transactionsUrl}/withdrawBetweenDates/${start}/${end}`;
     return this.http.get<Transaction[]>(url)
       .pipe(
         tap(_ => console.log('fetched transactions between dates')),

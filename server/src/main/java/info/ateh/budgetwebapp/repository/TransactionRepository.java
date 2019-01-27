@@ -15,5 +15,5 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     List<Transaction> findByMemberId(Long id);
 
     @Query("select t from Transaction t where t.amount<0 and t.date between ?1 and ?2")
-    List<Transaction> findBetweenDates(Date startDate,Date endDate);
+    List<Transaction> findWithdrawBetweenDates(Date startDate, Date endDate);
 }

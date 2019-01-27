@@ -1,76 +1,55 @@
 package info.ateh.budgetwebapp.controller;
 
 import info.ateh.budgetwebapp.entity.Member;
-import info.ateh.budgetwebapp.exception.*;
-import info.ateh.budgetwebapp.repository.MemberRepository;
-import info.ateh.budgetwebapp.repository.TransactionRepository;
+import info.ateh.budgetwebapp.service.MemberService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.*;
 import java.util.List;
 
-import static info.ateh.budgetwebapp.utils.Constants.*;
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 public class MemberController {
 
-    private final MemberRepository memberRepository;
-    private final TransactionRepository transactionRepository;
+    private final MemberService service;
 
-    MemberController(MemberRepository memberRepository,TransactionRepository transactionRepository) {
-        this.memberRepository = memberRepository;
-        this.transactionRepository = transactionRepository;
+    MemberController(MemberService service) {
+        this.service=service;
     }
 
-    /** GET: возвращает всех членов семьи найденых репозитории*/
+    /** GET: возвращает всех членов семьи*/
     @GetMapping("/members")
     private List<Member> all() {
-        return memberRepository.findAll();
+        return service.getAllMembers();
     }
 
-    /** GET: возвращает одного члена семьи соответствующим id,
-     * либо кидает исключение */
+    /** GET: возвращает одного члена семьи соответствующим id */
     @GetMapping("/members/{id}")
-    private Member one(@PathVariable @Positive @NotNull Long id) {
-        return memberRepository.findById(id)
-                .orElseThrow(() -> new MemberNotFoundException(id));
+    private Member one(@PathVariable Long id) {
+        return service.getById(id);
     }
 
-    /** GET: проверяет занято ли имя члена семьи и возвращает результат проверки */
+    /** GET: Возвращает результат проверки занято ли уже имя */
     @GetMapping("/members/isNameTaken/{name}")
-    private boolean isNameTaken(@PathVariable @NotNull @NotBlank
-                        @Size(min = MIN_NAME_LEN, max = MAX_NAME_LEN)
-                        @Pattern(regexp = NAME_REGEXP) String name) {
-        return memberRepository.findByName(name) != null;
+    private boolean nameTaken(@PathVariable String name) {
+        return service.isNameTaken(name);
     }
 
-    /** POST: добавляет нового члена семьи в репозиторий  */
+    /** POST: добавляет нового члена семьи */
     @PostMapping("/members")
-    private Member newMember(@RequestBody @NotNull Member newMember) {
-        return memberRepository.save(newMember);
+    private Member addNew(@RequestBody Member newMember) {
+        return service.addNewMember(newMember);
     }
 
     /** PUT: Заменяет члена семьи в репозитории или добавляет нового */
     @PutMapping("/members/{id}")
-    private Member replaceMember(@RequestBody @NotNull Member newMember,
-                         @PathVariable @Positive @NotNull Long id) {
-        return memberRepository.findById(id)
-                .map(member -> {
-                    member.setName(newMember.getName());
-                    return memberRepository.save(member);
-                })
-                .orElseGet(() -> {
-                    newMember.setId(id);
-                    newMember.setName(newMember.getName());
-                    return memberRepository.save(newMember);
-                });
+    private Member replace(@RequestBody Member newMember, @PathVariable Long id) {
+        return service.replaceMember(newMember,id);
     }
 
+    /** Удаляет члена семьи */
     @DeleteMapping("/members/{id}")
-    private void deleteMember(@PathVariable @Positive @NotNull Long id) {
-        if (transactionRepository.findByMemberId(id).size() > 0)
-            throw new MemberHasTransactionsException(id);
-        else memberRepository.deleteById(id);
+    private void delete(@PathVariable Long id) {
+        service.deleteMember(id);
     }
 
 }

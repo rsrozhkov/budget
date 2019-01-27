@@ -30,7 +30,7 @@ export class MembersComponent implements OnInit {
       if (!result)
         this.memberService.addMember(new Member(name))
           .subscribe(member => {
-            this.members.push(member)
+            this.members.push(member);
             this.getMembers();
           });
     });
@@ -40,7 +40,7 @@ export class MembersComponent implements OnInit {
   private delete(member: Member): void {
     this.transactionService.checkForOwner(member.id)
       .subscribe(result => {
-        if (result) alert(`Удаление не возможго, так как у ${member.name} есть транзакции. Сначала удалите транзакции.`);
+        if (result) alert(`Удаление не возможно, так как у ${member.name} есть транзакции. Сначала удалите транзакции.`);
         else this.deleteMember(member);
       });
   }

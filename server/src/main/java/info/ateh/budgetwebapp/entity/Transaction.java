@@ -42,7 +42,7 @@ public class Transaction {
         this.date = new Date();
         this.member = member;
         this.amount = amount;
-        setComment(comment);
+        this.comment = comment;
     }
 
     /** Этот конструктор в данномм варианте приложения нужен только для тестирования,
@@ -50,16 +50,5 @@ public class Transaction {
     public Transaction(Date date, Member member, Long amount, String comment) {
         this(member,amount,comment);
         this.date = date;
-    }
-
-    private void setComment(String comment) {
-        this.comment = normalizeSpaces(comment);
-    }
-
-    /**
-     * Убирает лишние пробелы из строки
-     */
-    private static String normalizeSpaces(String string) {
-        return string.trim().replaceAll("\\s+", " ");
     }
 }

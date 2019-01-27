@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Transaction} from "../../classes/transaction";
 import {TransactionService} from "../../services/transaction.service";
+import {forEach} from "@angular/router/src/utils/collection";
 
 @Component({
   selector: 'app-report',
