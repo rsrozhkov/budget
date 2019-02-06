@@ -19,28 +19,29 @@
 
 <div class="form" *ngIf="transactionType != 0">
 
-  <div class="field">
+ <div class="field">
     <label for="select">Имя:</label>
-    <select id="select" [(ngModel)]="selectedMember" (mousedown)="getMembersSortedByName()">
-      <option disabled>Выберите имя...</option>
+    <select id="select" [(ngModel)]="selectedMember" (focus)="getMembersSortedByName()">
+      <option disabled [value]="undefined">Выберите имя...</option>
       <option *ngFor="let member of members" [ngValue]="member">{{member.name}}</option>
     </select>
   </div>
 
+
   <div class="field">
     <label>Сумма:</label>
-    <input class="amount" [(ngModel)]="tAmount" type="number" required min="0.01"
-           pattern="[0-9]+\.?[0-9]{0,2}" #amount="ngModel" placeholder="0.00"/>
+    <input class="amount" ngModel type="number" required min="0.01"
+           pattern="[0-9]+\.?[0-9]{0,2}" #amount="ngModel" placeholder="0,00"/>
 
     <div *ngIf="amount.invalid && (amount.dirty || amount.touched)">
       <label *ngIf="amount.errors.required" class="error-message">
         Нужно ввести сумму.
       </label>
       <label *ngIf="amount.errors.min" class="error-message">
-        Минимальная сумма 0.01
+        Минимальная сумма 0,01
       </label>
       <label *ngIf="amount.errors.pattern" class="error-message">
-        Формат суммы "123.45".
+        Формат суммы "123,45".
       </label>
     </div>
     <label *ngIf="notEnoughMoney" class="error-message">
@@ -51,7 +52,7 @@
   <div class="field">
     <label *ngIf="transactionType === 1">Откуда:</label>
     <label *ngIf="transactionType === -1">На что:</label>
-    <input type="text" [(ngModel)]="transactionComment"
+    <input type="text" ngModel
            required minlength="3" maxlength="150"
            pattern=".+" #comment="ngModel">
 

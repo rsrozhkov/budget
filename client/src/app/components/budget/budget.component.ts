@@ -33,6 +33,7 @@ export class BudgetComponent implements OnInit {
 
   /** Получает и сортирует по алфавиту список членов семьи с сервера */
   private getMembersSortedByName () {
+    this.selectedMember = null;
     this.memberService.getMembers()
       .subscribe(members => this.members = members
         .sort((prev, next) => {

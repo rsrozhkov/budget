@@ -12,6 +12,7 @@ const httpOptions = {
 })
 export class TransactionService {
   private transactionsUrl = '//localhost:8080/transactions';
+  //private transactionsUrl = '//ateh.info/transactions';
   private balanceUrl = `${this.transactionsUrl}/balance`;
 
   constructor(private http: HttpClient) { }

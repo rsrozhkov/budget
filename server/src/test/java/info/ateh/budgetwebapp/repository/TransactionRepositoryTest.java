@@ -23,26 +23,26 @@ public class TransactionRepositoryTest {
     @Autowired
     private TransactionRepository transactionRepository;
 
-    @Test
-    public void findByMemberId() {
-        //--- Когда репозиторий пуст
-        assertThat(transactionRepository.findByMemberId(1L).size()).isZero();
-
-        Member anka = new Member("Анка");
-        entityManager.persist(anka);
-        entityManager.flush();
-        Transaction transaction = new Transaction(anka,1000L,"Empty");
-        entityManager.persist(transaction);
-        entityManager.flush();
-
-        //--- Когда репозиторий не пуст, но в нём нет нужного члена семьи
-        List<Transaction> notFound = transactionRepository.findByMemberId(anka.getId()+1);
-        assertThat(notFound.size()).isZero();
-
-        //--- Когда в репозитории присутствует нужный член семьи
-        List<Transaction> found = transactionRepository.findByMemberId(anka.getId());
-        assertThat(found.get(0).getMember().getId()).isEqualTo(anka.getId());
-    }
+//    @Test
+//    public void findByMemberId() {
+//        //--- Когда репозиторий пуст
+//        assertThat(transactionRepository.findByMemberId(1L).size()).isZero();
+//
+//        Member anka = new Member("Анка");
+//        entityManager.persist(anka);
+//        entityManager.flush();
+//        Transaction transaction = new Transaction(anka,1000L,"Empty");
+//        entityManager.persist(transaction);
+//        entityManager.flush();
+//
+//        //--- Когда репозиторий не пуст, но в нём нет нужного члена семьи
+//        List<Transaction> notFound = transactionRepository.findByMemberId(anka.getId()+1);
+//        assertThat(notFound.size()).isZero();
+//
+//        //--- Когда в репозитории присутствует нужный член семьи
+//        List<Transaction> found = transactionRepository.findByMemberId(anka.getId());
+//        assertThat(found.get(0).getMember().getId()).isEqualTo(anka.getId());
+//    }
 
     @Test
     public void findBetweenDates() {

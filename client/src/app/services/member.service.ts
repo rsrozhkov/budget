@@ -14,6 +14,7 @@ const httpOptions = {
 
 export class MemberService {
   private membersUrl = '//localhost:8080/members';  // URL to web api
+  //private membersUrl = '//ateh.info/members';  // URL to web api
 
   constructor(private http: HttpClient) { }
 
