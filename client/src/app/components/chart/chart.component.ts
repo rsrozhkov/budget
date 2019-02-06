@@ -28,12 +28,18 @@ export class ChartComponent implements OnInit {
 
   /** Подготовка данных для отрисовки */
   private initChartData() {
-    this.labels.push("");
-    this.data.push(0);
-    for(let i =0, total=0, len = this.transactions.length; i < len; i++) {
-      this.labels.push(this.transactions[i].date);
-      total = this.transactions[i].amount/100 +total;
-      this.data.push(total);
+    //this.labels.push("");
+    //this.data.push(0);
+    for(let i =0, total=0, len = this.transactions.length, last = len-1; i < len; i++) {
+      let date = this.transactions[i].date;
+      let amount = this.transactions[i].amount/100;
+      if (i<last && this.transactions[i+1].date == date) {
+        total = amount +total;
+      } else {
+        this.labels.push(date);
+        total = amount +total;
+        this.data.push(total);
+      }
     }
   }
 
@@ -44,9 +50,9 @@ export class ChartComponent implements OnInit {
       data: {
         labels: this.labels,
         datasets: [{
-          label: 'Средств в бюджете',
+          label: 'Средств  в бюджете',
           data: this.data,
-          fill:false,
+          fill:true,
           lineTension:0.2,
           borderColor:"red",
           borderWidth: 1
@@ -58,6 +64,18 @@ export class ChartComponent implements OnInit {
           display:true
         },
         scales: {
+          xAxes: [{
+            type: 'time',
+            time: {
+              unit: 'day',
+              displayFormats: {
+                'day': 'DD.MM.YYYY'
+              }
+            },
+            ticks: {
+              beginAtZero:true
+            }
+          }],
           yAxes: [{
             ticks: {
               beginAtZero:true

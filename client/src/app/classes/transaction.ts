@@ -24,6 +24,6 @@ export class Transaction {
    * Убирает лишние пробелы из строки
    */
   private setComment(comment: string) {
-    this.comment = comment.replace(/.+s/g, ' ').trim();
+    this.comment = comment.replace(/\s+/g, ' ').trim();
   }
 }

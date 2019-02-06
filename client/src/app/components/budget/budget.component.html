@@ -21,7 +21,7 @@
 
   <div class="field">
     <label for="select">Имя:</label>
-    <select id="select" [(ngModel)]="selectedMember">
+    <select id="select" [(ngModel)]="selectedMember" (mousedown)="getMembersSortedByName()">
       <option disabled>Выберите имя...</option>
       <option *ngFor="let member of members" [ngValue]="member">{{member.name}}</option>
     </select>
@@ -30,7 +30,7 @@
   <div class="field">
     <label>Сумма:</label>
     <input class="amount" [(ngModel)]="tAmount" type="number" required min="0.01"
-           pattern="[0-9]+.[0-9]{0,2}" #amount="ngModel" placeholder="0.00"/>
+           pattern="[0-9]+\.?[0-9]{0,2}" #amount="ngModel" placeholder="0.00"/>
 
     <div *ngIf="amount.invalid && (amount.dirty || amount.touched)">
       <label *ngIf="amount.errors.required" class="error-message">
@@ -53,7 +53,7 @@
     <label *ngIf="transactionType === -1">На что:</label>
     <input type="text" [(ngModel)]="transactionComment"
            required minlength="3" maxlength="150"
-           pattern=".*" #comment="ngModel">
+           pattern=".+" #comment="ngModel">
 
     <div *ngIf="comment.invalid && (comment.dirty || comment.touched)">
       <label *ngIf="comment.errors.required" class="error-message">

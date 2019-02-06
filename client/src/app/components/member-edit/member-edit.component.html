@@ -1,7 +1,7 @@
 <div *ngIf="member">
 
   <h3>Редактирование {{member.name}}</h3>
-  <div><span>id: </span>{{member.id}}</div>
+  <div><span>№: </span>{{member.id}}</div>
   <div>
     <label>Новое имя:
       <input type="text" [(ngModel)]="member.name"

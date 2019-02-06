@@ -19,12 +19,11 @@
   <h3>Отчёт по затратам:</h3>
   <table>
     <tr>
-      <th>ID</th><th>Дата</th><th>Кто</th>
+      <th>Дата</th><th>Кто</th>
       <th>Сумма</th><th>На что</th>
     </tr>
     <tr *ngFor="let transaction of transactions">
-      <td>{{transaction.id}}</td>
-      <td>{{transaction.date}}</td>
+      <td>{{transaction.date | date:'dd.MM.yyyy'}}</td>
       <td>{{transaction.member.name}}</td>
       <td>{{transaction.amount/100}}</td>
       <td>{{transaction.comment.toString()}}</td>
