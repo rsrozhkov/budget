@@ -31,7 +31,7 @@
   <div class="field">
     <label>Сумма:</label>
     <input class="amount" ngModel type="number" required min="0.01"
-           pattern="[0-9]+\.?[0-9]{0,2}" #amount="ngModel" placeholder="0,00"/>
+           pattern="[0-9]+[.,]?[0-9]{0,2}" #amount="ngModel" placeholder="0,00"/>
 
     <div *ngIf="amount.invalid && (amount.dirty || amount.touched)">
       <label *ngIf="amount.errors.required" class="error-message">
@@ -41,7 +41,7 @@
         Минимальная сумма 0,01
       </label>
       <label *ngIf="amount.errors.pattern" class="error-message">
-        Формат суммы "123,45".
+        Формат суммы "123,45"
       </label>
     </div>
     <label *ngIf="notEnoughMoney" class="error-message">
