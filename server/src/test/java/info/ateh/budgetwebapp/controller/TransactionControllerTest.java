@@ -94,11 +94,13 @@ public class TransactionControllerTest {
                 .andExpect(jsonPath("$", is(true)));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void checkForOwnerNull() throws Exception{
         Long id = null;
         mvc.perform(get("/transactions/checkForOwner/{id}", id)
-                .contentType(MediaType.APPLICATION_JSON));
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
     }
 
     @Test
