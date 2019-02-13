@@ -14,14 +14,14 @@ import static info.ateh.budgetwebapp.utils.Constants.*;
 public class Member {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Positive (message = "Id must be positive")
+    @Positive (message = "Число должно быть больше нуля")
     private Long id;
 
-    @NotNull (message = "Name cannot be null")
-    @NotBlank (message = "Name cannot be blank")
+    @NotNull (message = "Имя должно присутствовать")
+    @NotBlank (message = "Имя не может быть пустым")
     @Size(min = MIN_NAME_LEN, max = MAX_NAME_LEN,
-            message = "Name must be between " + MIN_NAME_LEN + "  and " + MAX_NAME_LEN + " characters")
-    @Pattern(regexp = NAME_REGEXP, message = "Name must contain only letters spaces and hyphen between letters")
+            message = "Длина имени должна быть от " + MIN_NAME_LEN + "  до " + MAX_NAME_LEN + " символов")
+    @Pattern(regexp = NAME_REGEXP, message = "Имя должно содержать только буквы, пробелы и дефисы между словами")
     @Column(unique = true)
     private String name;
 

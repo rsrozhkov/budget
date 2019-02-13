@@ -5,6 +5,7 @@ import info.ateh.budgetwebapp.exception.MemberHasTransactionsException;
 import info.ateh.budgetwebapp.exception.MemberNotFoundException;
 import info.ateh.budgetwebapp.repository.MemberRepository;
 import info.ateh.budgetwebapp.repository.TransactionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.*;
@@ -14,13 +15,11 @@ import static info.ateh.budgetwebapp.utils.Constants.*;
 
 @Service
 public class MemberService {
-    private final MemberRepository memberRepository;
-    private final TransactionRepository transactionRepository;
 
-    public MemberService(MemberRepository memberRepository, TransactionRepository transactionRepository) {
-        this.memberRepository = memberRepository;
-        this.transactionRepository = transactionRepository;
-    }
+    @Autowired
+    private MemberRepository memberRepository;
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     /** Возвращает всех членов семьи найденых репозитории*/
     public List<Member> getAllMembers() {
@@ -64,6 +63,6 @@ public class MemberService {
     public void deleteMember(@Positive @NotNull Long id) {
         if (transactionRepository.findByMemberId(id).size() > 0)
             throw new MemberHasTransactionsException(id);
-        else memberRepository.deleteById(id);
+        memberRepository.deleteById(id);
     }
 }

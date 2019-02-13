@@ -16,25 +16,25 @@ import static info.ateh.budgetwebapp.utils.Constants.*;
 public class Transaction {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Positive (message = "Id must be positive")
+    @Positive (message = "Id должен быть больше нуля")
     private Long id;
 
-    @NotNull (message = "Date cannot be null")
+    @NotNull (message = "Дата должна присутствовать")
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = DATE_PATTERN)
-    @PastOrPresent(message = "date value cannot be in a future")
+    @PastOrPresent(message = "Значение даты не должно быть больше текущей даты")
     private Date date;
 
     @ManyToOne
-    @NotNull (message = "Member cannot be null")
+    @NotNull (message = "Член семьи не должен быть null")
     private Member member;
 
-    @NotNull (message = "Amount cannot be null")
+    @NotNull (message = "Объем не может быть null")
     private Long amount;
 
-    @NotBlank (message = "Comment cannot be blank")
+    @NotBlank (message = "Комментарий не может быть пустым")
     @Size(min = MIN_COMMENT_LEN, max = MAX_COMMENT_LEN,
-            message = "Comment must be between " + MIN_COMMENT_LEN + " and " + MAX_COMMENT_LEN + " characters")
+            message = "Длина комментария должна быть от " + MIN_COMMENT_LEN + " до " + MAX_COMMENT_LEN + " символов")
     @Pattern(regexp = COMMENT_PATTERN)
     private String comment;
 
@@ -43,12 +43,5 @@ public class Transaction {
         this.member = member;
         this.amount = amount;
         this.comment = comment;
-    }
-
-    /** Этот конструктор в данномм варианте приложения нужен только для тестирования,
-     * так как даты генерируются автоматически в момент создания транзакции*/
-    public Transaction(Date date, Member member, Long amount, String comment) {
-        this(member,amount,comment);
-        this.date = date;
     }
 }

@@ -3,6 +3,7 @@ package info.ateh.budgetwebapp.service;
 import info.ateh.budgetwebapp.entity.Transaction;
 import info.ateh.budgetwebapp.exception.NotEnoughMoneyException;
 import info.ateh.budgetwebapp.repository.TransactionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.*;
@@ -11,11 +12,8 @@ import java.util.List;
 
 @Service
 public class TransactionService {
-    private final TransactionRepository transactionRepository;
-
-    TransactionService(TransactionRepository transactionRepository) {
-        this.transactionRepository = transactionRepository;
-    }
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     /**
      * Возвращает текущий баланс
