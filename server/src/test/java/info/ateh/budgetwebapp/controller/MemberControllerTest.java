@@ -6,12 +6,14 @@ import info.ateh.budgetwebapp.exception.MemberNotFoundException;
 import info.ateh.budgetwebapp.service.MemberService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.exceptions.base.MockitoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.util.NestedServletException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -101,7 +103,13 @@ public class MemberControllerTest {
                 .andExpect(jsonPath("$.name", is(member.getName())));
     }
 
-    //TODO написать тесты для addNew() с неверными входными данными
+    @Test
+    public void addNewEmpty() throws Exception{
+        mvc.perform(post("/members/")
+                .content("")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
 
     @Test
     public void replace() throws Exception{
@@ -128,7 +136,7 @@ public class MemberControllerTest {
     @Test
     public void replaceIfNotExistMember() throws Exception{
         Member member = new Member("MemberName");
-        member.setId(1L);
+        member.setId(999L);
 
         String jsonMember = mapper.writeValueAsString(member);
 
@@ -142,7 +150,26 @@ public class MemberControllerTest {
                 .andExpect(jsonPath("$.name", is(member.getName())));
     }
 
-    //TODO написать тесты для replace() с неверными входными данными
+    @Test(expected = MockitoException.class)
+    public void replaceWrongId() throws Exception{
+        Member member = new Member("MemberName");
+        Member newMember = new Member("MemberToReplace");
+        String jsonMember = mapper.writeValueAsString(newMember);
+
+        given(service.replaceMember(member,0L)).willThrow(new NestedServletException("replaceWrongId test ok"));
+
+        mvc.perform(put("/members/{id}", 0L)
+                .content(jsonMember)
+                .contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    public void replaceEmptyMember() throws Exception{
+        mvc.perform(put("/members/{id}", 1L)
+                .content("")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
 
     @Test
     public void deleteTest() throws Exception{

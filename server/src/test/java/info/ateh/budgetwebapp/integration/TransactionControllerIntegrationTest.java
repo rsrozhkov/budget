@@ -11,11 +11,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.validation.ConstraintViolationException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -97,6 +99,37 @@ public class TransactionControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(transaction.getId()));
+    }
+
+    @Test
+    public void newTransactionEmpty() throws Exception{
+        mvc.perform(post("/transactions/")
+                .content("")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test (expected = ConstraintViolationException.class)
+    public void newTransactionNullMember() throws Exception{
+        Transaction transaction = new Transaction(null,1000L,"Any");
+        transaction = transactionService.addTransaction(transaction);
+        String jsonTransaction = mapper.writeValueAsString(transaction);
+
+        mvc.perform(post("/transactions/")
+                .content(jsonTransaction)
+                .contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test (expected = InvalidDataAccessApiUsageException.class)
+    public void newTransactionNotExistMember() throws Exception{
+        Member member = new Member("Any");
+        Transaction transaction = new Transaction(member,1000L,"Any");
+        transaction = transactionService.addTransaction(transaction);
+        String jsonTransaction = mapper.writeValueAsString(transaction);
+
+        mvc.perform(post("/transactions/")
+                .content(jsonTransaction)
+                .contentType(MediaType.APPLICATION_JSON));
     }
 
 }

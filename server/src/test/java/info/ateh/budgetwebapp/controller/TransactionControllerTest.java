@@ -9,9 +9,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.util.NestedServletException;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -115,5 +117,34 @@ public class TransactionControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(transaction.getId()))
                 .andExpect(jsonPath("$.date", is(transaction.getDate())));
+    }
+
+    @Test
+    public void newTransactionEmpty() throws Exception{
+        mvc.perform(post("/transactions/")
+                .content("")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test (expected = NestedServletException.class)
+    public void newTransactionNullMember() throws Exception{
+        Transaction transaction = new Transaction(null,1000L,"Any");
+        String jsonTransaction = mapper.writeValueAsString(transaction);
+        given(service.addTransaction(transaction)).willThrow(new RuntimeException());
+        mvc.perform(post("/transactions/")
+                .content(jsonTransaction)
+                .contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test (expected = NestedServletException.class)
+    public void newTransactionNotExistMember() throws Exception{
+        Member member = new Member("Any");
+        Transaction transaction = new Transaction(member,1000L,"Any");
+        String jsonTransaction = mapper.writeValueAsString(transaction);
+        given(service.addTransaction(transaction)).willThrow(new InvalidDataAccessApiUsageException("newTransactionNotExistMember test ok"));
+        mvc.perform(post("/transactions/")
+                .content(jsonTransaction)
+                .contentType(MediaType.APPLICATION_JSON));
     }
 }

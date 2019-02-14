@@ -80,6 +80,27 @@ public class MemberControllerIntegrationTest {
     }
 
     @Test
+    public void addNew() throws Exception{
+        Member member = new Member("addNew");
+        String jsonMember = mapper.writeValueAsString(member);
+
+        mvc.perform(post("/members/")
+                .content(jsonMember)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.name", is(member.getName())));
+    }
+
+    @Test
+    public void addNewEmpty() throws Exception{
+        mvc.perform(post("/members/")
+                .content("")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void replace() throws Exception{
         Member member = memberService.addNewMember(new Member("replace"));
         Long id = member.getId();
@@ -107,6 +128,24 @@ public class MemberControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.name", is(member.getName())));
+    }
+
+    @Test(expected = NestedServletException.class)
+    public void replaceWrongId() throws Exception{
+        Member newMember = new Member("MemberToReplace");
+        String jsonMember = mapper.writeValueAsString(newMember);
+
+        mvc.perform(put("/members/{id}", 0L)
+                .content(jsonMember)
+                .contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    public void replaceEmptyMember() throws Exception{
+        mvc.perform(put("/members/{id}", 1L)
+                .content("")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
