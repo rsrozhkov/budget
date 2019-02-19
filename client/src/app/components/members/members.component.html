@@ -1,32 +1,32 @@
 <h3>Члены семьи:</h3>
-<h4>Добавить нового члена семьи:</h4>
+<h4 id="addMemberHeader">Добавить нового члена семьи:</h4>
 <div>
-  <label>Имя:
-    <input type="text" [(ngModel)]="memberName"
+  <label id="nameLabel">Имя:
+    <input id="nameInput" type="text" [(ngModel)]="memberName"
            required minlength="2" maxlength="30"
            pattern="([А-ЯЁа-яёA-Za-z]+(([-])|(\.)|(\s)|(\.\s))?)+"
            appUniqueName #name="ngModel"/>
   </label>
-  <button (click)="add(name.value)" [disabled]="!name.valid">Добавить</button>
+  <button id="addButton" (click)="add(name.value)" [disabled]="!name.valid">Добавить</button>
   <div *ngIf="name.invalid && (name.dirty || name.touched)" class="error-message">
-    <div *ngIf="name.errors.required">
+    <label id="nameReqErr" *ngIf="name.errors.required">
       Нужно ввести имя.
-    </div>
-    <div *ngIf="name.errors.minlength">
-      Имя должно содержть 3-30 символов.
-    </div>
-    <div *ngIf="name.errors.pattern">
+    </label>
+    <label id="nameLenErr" *ngIf="name.errors.minlength">
+      Имя должно содержть 2-30 символов.
+    </label>
+    <label id="nameFormatErr" *ngIf="name.errors.pattern">
       Недопустимый символ.
-    </div>
-    <div *ngIf="name.pending">
+    </label>
+    <label *ngIf="name.pending">
       Проверка...
-    </div>
-    <div *ngIf="name.errors?.uniqueName">
+    </label>
+    <label id="nameExistErr" *ngIf="name.errors?.uniqueName">
       Имя уже занято, введите другое.
-    </div>
+    </label>
   </div>
 </div>
-<h4>Перечень всех членов семьи:</h4>
+<h4 id="listHeader">Перечень всех членов семьи:</h4>
 <ul class="members">
   <li *ngFor="let member of members">
     <a routerLink="/members/{{member.id}}">

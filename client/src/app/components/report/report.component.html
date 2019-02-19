@@ -1,17 +1,17 @@
 <div class="form">
   <div class="field">
-    <label for="startDate">Начало периода: </label>
-    <input type="date" id="startDate" [(ngModel)]="startDate"/>
+    <label id="startDateLabel" for="startDateInput">Начало периода: </label>
+    <input type="date" id="startDateInput" [(ngModel)]="startDate"/>
   </div>
   <div class="field">
-    <label for="endDate">Конец периода: </label>
-    <input type="date" id="endDate" [(ngModel)]="endDate"/>
+    <label id="endDateLabel" for="endDateInput">Конец периода: </label>
+    <input type="date" id="endDateInput" [(ngModel)]="endDate"/>
   </div>
-  <div *ngIf="startDate && endDate && startDate > endDate" class="error-message">
+  <div id="validationError" *ngIf="startDate && endDate && startDate > endDate" class="error-message">
     Не может быть раньще начальной даты.
   </div>
   <div>
-    <button (click)="load(startDate,endDate)" [disabled]="!startDate || !endDate || startDate > endDate">Выгрузить</button>
+    <button id="loadButton" (click)="load(startDate,endDate)" [disabled]="!startDate || !endDate || startDate > endDate">Выгрузить</button>
   </div>
 </div>
 

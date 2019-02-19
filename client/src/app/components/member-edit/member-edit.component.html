@@ -1,10 +1,10 @@
 <div *ngIf="member">
 
   <h3>Редактирование {{member.name}}</h3>
-  <div><span>№: </span>{{member.id}}</div>
+  <div id="idLabel"><span>№: </span>{{member.id}}</div>
   <div>
-    <label>Новое имя:
-      <input type="text" [(ngModel)]="member.name"
+    <label id="nameLabel">Новое имя:
+      <input id="nameInput" type="text" [(ngModel)]="member.name"
              required minlength="2" maxlength="30"
              pattern="([А-ЯЁа-яёA-Za-z]+(([-])|(\.)|(\s)|(\.\s))?)+"
              appUniqueName #name="ngModel">
@@ -12,24 +12,24 @@
   </div>
   <div *ngIf="!isTheSameName(member.name) &&
         name.invalid && (name.dirty || name.touched)" class="error-message">
-    <div *ngIf="name.errors.required">
+    <div id="nameReqErr" *ngIf="name.errors.required">
       Нужно ввести имя.
     </div>
-    <div *ngIf="name.errors.minlength">
+    <div id="nameLenErr" *ngIf="name.errors.minlength">
       Имя должно содержть 2-30 символов.
     </div>
-    <div *ngIf="name.errors.pattern && !name.errors.minlength">
+    <div id="nameFormatErr" *ngIf="name.errors.pattern && !name.errors.minlength">
       Недопустимый символ.
     </div>
     <div *ngIf="name.pending">
       Проверка...
     </div>
-    <div *ngIf="name.errors?.uniqueName">
+    <div id="nameExistErr" *ngIf="name.errors?.uniqueName">
         Это имя уже занято, введите другое.
     </div>
   </div>
-  <button (click)="goBack()">Отмена</button>
-  <button (click)="save()" [disabled]="!isTheSameName(member.name) && !name.valid">ОК</button>
+  <button id="goBackButton" (click)="goBack()">Отмена</button>
+  <button id="saveButton" (click)="save()" [disabled]="!isTheSameName(member.name) && !name.valid">ОК</button>
 </div>
 
 

@@ -28,8 +28,6 @@ export class ChartComponent implements OnInit {
 
   /** Подготовка данных для отрисовки */
   private initChartData() {
-    //this.labels.push("");
-    //this.data.push(0);
     for(let i =0, total=0, len = this.transactions.length, last = len-1; i < len; i++) {
       let date = this.transactions[i].date;
       let amount = this.transactions[i].amount/100;
@@ -59,10 +57,6 @@ export class ChartComponent implements OnInit {
         }]
       },
       options: {
-        title:{
-          text:"График бюджета",
-          display:true
-        },
         scales: {
           xAxes: [{
             type: 'time',
